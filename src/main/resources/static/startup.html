@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Startup · StartupHub</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('startuphub-theme')||'light')}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div id="app-shell"></div>
+
+<main class="container">
+
+  <div class="page-header">
+    <div style="min-width:0;">
+      <a href="/dashboard.html#startups" class="subtle" style="font-size:0.84rem;">← Back to startups</a>
+      <div style="display:flex; align-items:center; gap:11px; flex-wrap:wrap; margin-top:6px;">
+        <h1 id="startup-name" style="margin:0;">Loading…</h1>
+        <span id="startup-stage"></span>
+      </div>
+      <p class="muted" id="startup-desc" style="margin:6px 0 0; max-width:64ch;"></p>
+    </div>
+    <div class="toolbar" id="startup-actions"></div>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Startup sections">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="team">Team</button>
+    <button class="tab" data-tab="finance">Finance</button>
+    <button class="tab" data-tab="investments">Investments</button>
+    <button class="tab" data-tab="growth">Growth</button>
+    <button class="tab" data-tab="mvp">MVP</button>
+    <button class="tab" data-tab="roadmap">Roadmap</button>
+    <button class="tab" data-tab="competitors">Competitors</button>
+  </nav>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="tab-panel active" id="panel-overview">
+    <div class="grid-4" id="overview-kpis"></div>
+
+    <div class="grid-sidebar" style="margin-top:16px;">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h4>Stage progress</h4>
+              <p class="muted" style="margin:0; font-size:0.84rem;">Where this startup sits on its journey.</p>
+            </div>
+            <div id="advance-holder"></div>
+          </div>
+          <div id="stage-timeline"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h4>Revenue vs expenses</h4>
+              <p class="muted" style="margin:0; font-size:0.84rem;">Grouped by the month each entry was recorded.</p>
+            </div>
+          </div>
+          <div class="chart-box" id="overview-trend-holder"><canvas id="chart-overview-trend"></canvas></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h4>Project revenue</h4>
+              <p class="muted" style="margin:0; font-size:0.84rem;">Quick what-if projection (Strategy pattern). To record real revenue, use the Automatic revenue calculator on the Finance tab.</p>
+            </div>
+          </div>
+          <form id="projection-form" novalidate>
+            <div class="form-grid">
+              <div class="field" data-field="strategy">
+                <label for="proj-strategy">Revenue model</label>
+                <select id="proj-strategy" name="strategy">
+                  <option value="subscriptionRevenueStrategy">Subscription</option>
+                  <option value="adRevenueStrategy">Advertising</option>
+                  <option value="transactionRevenueStrategy">Transaction fees</option>
+                </select>
+              </div>
+              <div class="field" data-field="baseAmount">
+                <label for="proj-base">Base amount per customer</label>
+                <input type="number" id="proj-base" name="baseAmount" step="0.01" min="0" placeholder="20">
+                <div class="field-error" data-error-for="baseAmount"></div>
+              </div>
+              <div class="field" data-field="customers">
+                <label for="proj-customers">Customers</label>
+                <input type="number" id="proj-customers" name="customers" min="0" step="1" placeholder="500">
+                <div class="field-error" data-error-for="customers"></div>
+              </div>
+              <div class="field" style="display:flex; align-items:flex-end;">
+                <button type="submit" class="btn btn-primary" id="proj-btn">Calculate</button>
+              </div>
+            </div>
+          </form>
+          <div id="projection-result"></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><h4>Startup health</h4></div>
+          <div id="health-holder"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h4>MVP</h4></div>
+          <div id="mvp-overview-holder"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h4>At a glance</h4></div>
+          <div id="glance-holder"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TEAM ============ -->
+  <section class="tab-panel" id="panel-team">
+    <div class="grid-3" id="team-kpis"></div>
+    <div class="card" style="margin-top:16px;">
+      <div class="card-head">
+        <h4>Team members</h4>
+        <button class="btn btn-primary btn-sm owner-only" id="add-employee-btn">+ Add member</button>
+      </div>
+      <div id="team-holder"></div>
+    </div>
+  </section>
+
+  <!-- ============ FINANCE ============ -->
+  <section class="tab-panel" id="panel-finance">
+    <div class="grid-4" id="finance-kpis"></div>
+
+    <div class="grid-2" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-head"><h4>Monthly revenue and expenses</h4></div>
+        <div class="chart-box" id="finance-trend-holder"><canvas id="chart-finance-trend"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h4>Where the money goes</h4></div>
+        <div class="chart-box" id="finance-breakdown-holder"><canvas id="chart-finance-breakdown"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card owner-only" id="revenue-calc-card" style="margin-top:16px;">
+      <div class="card-head">
+        <div>
+          <h4>Automatic revenue calculator</h4>
+          <p class="muted" style="margin:0; font-size:0.84rem;">The server calculates the amount with the Strategy for the chosen model, then saves it as a revenue record.</p>
+        </div>
+      </div>
+      <div class="calc-layout">
+        <form id="calc-form" novalidate>
+          <div class="field" data-field="model">
+            <label for="calc-model">Revenue model</label>
+            <select id="calc-model" name="model">
+              <option value="SUBSCRIPTION">Subscription</option>
+              <option value="TRANSACTION">Transaction / commission</option>
+              <option value="ADVERTISEMENT">Advertisement</option>
+            </select>
+          </div>
+          <div class="calc-formula-hint" id="calc-hint"></div>
+          <div class="form-grid" id="calc-fields"></div>
+          <div class="field" data-field="source">
+            <label for="calc-source">Label for the revenue record <span class="subtle">(optional)</span></label>
+            <input type="text" id="calc-source" name="source" placeholder="e.g. Pro plan, October" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary" id="calc-btn">Calculate revenue</button>
+        </form>
+        <div class="calc-result" id="calc-result" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-head">
+          <h4>Revenue</h4>
+          <button class="btn btn-success btn-sm owner-only" id="add-revenue-btn">+ Add revenue</button>
+        </div>
+        <div id="revenue-holder"></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h4>Expenses</h4>
+          <button class="btn btn-outline btn-sm owner-only" id="add-expense-btn">+ Add expense</button>
+        </div>
+        <div id="expense-holder"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INVESTMENTS ============ -->
+  <section class="tab-panel" id="panel-investments">
+    <div class="grid-3" id="investment-kpis"></div>
+    <div class="grid-sidebar" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-head">
+          <h4>Investment history</h4>
+          <button class="btn btn-primary btn-sm" id="add-investment-btn">+ Record investment</button>
+        </div>
+        <div id="investments-holder"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h4>Funding mix</h4></div>
+        <div class="chart-box short" id="investment-chart-holder"><canvas id="chart-investments"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GROWTH ============ -->
+  <section class="tab-panel" id="panel-growth">
+    <div class="grid-3" id="growth-kpis"></div>
+    <div class="card" style="margin-top:16px;">
+      <div class="card-head"><h4>Campaign performance</h4></div>
+      <div class="chart-box" id="campaign-chart-holder"><canvas id="chart-campaigns"></canvas></div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <div class="card-head">
+        <h4>Campaigns</h4>
+        <button class="btn btn-primary btn-sm owner-only" id="add-campaign-btn">+ New campaign</button>
+      </div>
+      <div id="campaigns-holder"></div>
+    </div>
+  </section>
+
+  <!-- ============ MVP ============ -->
+  <section class="tab-panel" id="panel-mvp">
+    <div id="mvp-holder"></div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section class="tab-panel" id="panel-roadmap">
+    <div class="grid-3" id="roadmap-kpis"></div>
+    <div class="page-header" style="margin:20px 0 12px;">
+      <h4 style="margin:0;">Roadmaps</h4>
+      <button class="btn btn-primary btn-sm owner-only" id="add-roadmap-btn">+ New roadmap</button>
+    </div>
+    <div id="roadmap-holder"></div>
+  </section>
+
+  <!-- ============ COMPETITORS ============ -->
+  <section class="tab-panel" id="panel-competitors">
+    <div class="card">
+      <div class="card-head">
+        <h4>Competitive landscape</h4>
+        <button class="btn btn-primary btn-sm owner-only" id="add-competitor-btn">+ Add competitor</button>
+      </div>
+      <div id="competitors-holder"></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="/js/vendor/sockjs.min.js"></script>
+<script src="/js/vendor/stomp.umd.min.js"></script>
+<script src="/js/vendor/chart.umd.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/revenue-calculator.js"></script>
+<script src="/js/mvp.js"></script>
+<script src="/js/startup.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in · StartupHub</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('startuphub-theme')||'light')}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-brand-panel">
+    <h1>Run the whole startup from one dashboard.</h1>
+    <p>Stage, runway, team and every investor in one place — with live updates the moment something changes.</p>
+    <ul class="points">
+      <li><span class="b" aria-hidden="true">◆</span><span>Track valuation, revenue and burn against real numbers you record.</span></li>
+      <li><span class="b" aria-hidden="true">◆</span><span>Move through Idea, MVP, Growth and Scale with a roadmap that shows what is overdue.</span></li>
+      <li><span class="b" aria-hidden="true">◆</span><span>Founders, investors and mentors each get the view that fits their job.</span></li>
+    </ul>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="box">
+      <div class="brand"><span class="mark" aria-hidden="true"></span>StartupHub</div>
+      <h3>Welcome back</h3>
+      <p class="muted" style="margin-bottom:22px;">Log in to keep building.</p>
+
+      <div id="alert-box" aria-live="polite"></div>
+
+      <form id="login-form" novalidate>
+        <div class="field" data-field="email">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" autofocus>
+          <div class="field-error" data-error-for="email"></div>
+        </div>
+
+        <div class="field" data-field="password">
+          <label for="password">Password</label>
+          <div class="input-affix">
+            <input type="password" id="password" name="password" autocomplete="current-password">
+            <button type="button" class="affix-btn" id="toggle-password" aria-label="Show password">Show</button>
+          </div>
+          <div class="field-error" data-error-for="password"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">Log in</button>
+      </form>
+
+      <p class="muted" style="margin-top:18px;">No account yet? <a href="/register.html">Create one</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>

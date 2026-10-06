@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · StartupHub</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('startuphub-theme')||'light')}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div id="app-shell"></div>
+
+<main class="container">
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="view-overview">
+    <div class="page-header">
+      <div>
+        <h1 id="greeting">Good day</h1>
+        <p class="muted" id="greeting-sub" style="margin:0;">Here's what's happening with your startup today.</p>
+      </div>
+      <div class="toolbar" id="overview-actions"></div>
+    </div>
+
+    <div class="grid-4" id="kpi-grid"></div>
+
+    <div class="grid-sidebar" style="margin-top:16px;">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h4>Revenue vs expenses</h4>
+              <p class="muted" style="margin:0; font-size:0.84rem;">Last six months, from your recorded finance entries.</p>
+            </div>
+          </div>
+          <div class="chart-box" id="trend-holder"><canvas id="chart-trend"></canvas></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h4 id="startups-heading">My startups</h4>
+            <a href="#startups" class="btn btn-sm btn-ghost">View all</a>
+          </div>
+          <div class="grid-2" id="overview-startups"></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><h4>Recent activity</h4></div>
+          <div id="activity-feed"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MY STARTUPS ============ -->
+  <section class="view hidden" id="view-startups">
+    <div class="page-header">
+      <div>
+        <h1>My startups</h1>
+        <p class="muted" style="margin:0;">Everything you founded, with its current stage and numbers.</p>
+      </div>
+      <button class="btn btn-primary" id="new-startup-btn-2">+ New startup</button>
+    </div>
+    <div class="grid-3" id="my-startups"></div>
+  </section>
+
+  <!-- ============ DISCOVER ============ -->
+  <section class="view hidden" id="view-discover">
+    <div class="page-header">
+      <div>
+        <h1 id="discover-title">Discover startups</h1>
+        <p class="muted" style="margin:0;" id="discover-sub">Every startup on the platform.</p>
+      </div>
+    </div>
+
+    <div class="card card-tight" style="margin-bottom:16px;">
+      <div class="toolbar">
+        <div class="search">
+          <label class="sr-only" for="search-input">Search startups</label>
+          <input type="search" id="search-input" placeholder="Search by name, founder or description…">
+        </div>
+        <label class="sr-only" for="stage-filter">Filter by stage</label>
+        <select id="stage-filter">
+          <option value="">All stages</option>
+          <option value="IDEA">Idea</option>
+          <option value="MVP">MVP</option>
+          <option value="GROWTH">Growth</option>
+          <option value="SCALE">Scale</option>
+        </select>
+        <label class="sr-only" for="sort-select">Sort</label>
+        <select id="sort-select">
+          <option value="valuation">Highest valuation</option>
+          <option value="newest">Newest first</option>
+          <option value="name">Name A–Z</option>
+          <option value="stage">Furthest stage</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="muted" id="discover-count" style="font-size:0.85rem;"></p>
+    <div class="grid-3" id="discover-list"></div>
+  </section>
+
+  <!-- ============ PORTFOLIO (investor) ============ -->
+  <section class="view hidden" id="view-portfolio">
+    <div class="page-header">
+      <div>
+        <h1>My investments</h1>
+        <p class="muted" style="margin:0;">Everything you have personally backed.</p>
+      </div>
+    </div>
+    <div class="grid-4" id="portfolio-kpis"></div>
+    <div class="grid-sidebar" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-head"><h4>Your investments</h4></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Startup</th><th>Type</th><th>Amount</th><th>Date</th><th></th></tr></thead>
+            <tbody id="portfolio-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h4>By funding type</h4></div>
+        <div class="chart-box short" id="portfolio-chart-holder"><canvas id="chart-portfolio"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MILESTONES (mentor) ============ -->
+  <section class="view hidden" id="view-milestones">
+    <div class="page-header">
+      <div>
+        <h1>Milestones needing attention</h1>
+        <p class="muted" style="margin:0;">Open milestones across the startups you mentor, soonest deadline first.</p>
+      </div>
+    </div>
+    <div id="mentor-milestones"></div>
+  </section>
+
+  <!-- ============ NOTIFICATIONS ============ -->
+  <section class="view hidden" id="view-notifications">
+    <div class="page-header">
+      <div>
+        <h1>Notifications</h1>
+        <p class="muted" style="margin:0;">Pushed live over WebSocket the moment an event happens.</p>
+      </div>
+      <button class="btn btn-outline btn-sm" id="mark-all-read">Mark all as read</button>
+    </div>
+    <div id="notification-list"></div>
+  </section>
+
+  <!-- ============ ADMIN ============ -->
+  <section class="view hidden" id="view-admin">
+    <div class="page-header">
+      <div>
+        <h1>Platform administration</h1>
+        <p class="muted" style="margin:0;">Served from /api/admin/**, which is locked to ROLE_ADMIN on the server.</p>
+      </div>
+    </div>
+    <div class="grid-4" id="admin-kpis"></div>
+    <div class="grid-sidebar" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-head"><h4>Users</h4></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th></tr></thead>
+            <tbody id="admin-users-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h4>Startups by stage</h4></div>
+        <div class="chart-box short"><canvas id="chart-stages"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="/js/vendor/sockjs.min.js"></script>
+<script src="/js/vendor/stomp.umd.min.js"></script>
+<script src="/js/vendor/chart.umd.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

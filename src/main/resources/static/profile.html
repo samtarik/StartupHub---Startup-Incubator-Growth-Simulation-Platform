@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile · StartupHub</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('startuphub-theme')||'light')}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+</head>
+<body>
+<div id="app-shell"></div>
+
+<main class="container" style="max-width:900px;">
+
+  <div class="page-header">
+    <div>
+      <h1>Profile</h1>
+      <p class="muted" style="margin:0;">Your account details and how StartupHub looks.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <span class="avatar" id="profile-avatar" style="width:58px; height:58px; font-size:1.25rem;" aria-hidden="true">–</span>
+      <div style="min-width:0;">
+        <h3 id="profile-name" style="margin:0;">Loading…</h3>
+        <div class="muted" id="profile-email"></div>
+        <div style="margin-top:7px;"><span class="badge badge-brand" id="profile-role">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-head">
+      <div>
+        <h4>Your details</h4>
+        <p class="muted" style="margin:0; font-size:0.84rem;">Email and role are fixed after registration.</p>
+      </div>
+    </div>
+
+    <form id="profile-form" novalidate>
+      <div class="form-grid">
+        <div class="field" data-field="name">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" autocomplete="name">
+          <div class="field-error" data-error-for="name"></div>
+        </div>
+        <div class="field">
+          <label for="email-readonly">Email</label>
+          <input type="email" id="email-readonly" disabled>
+        </div>
+        <div class="field">
+          <label for="role-readonly">Role</label>
+          <input type="text" id="role-readonly" disabled>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="save-profile-btn">Save changes</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;" id="settings">
+    <div class="card-head">
+      <div>
+        <h4>Appearance</h4>
+        <p class="muted" style="margin:0; font-size:0.84rem;">Saved in this browser.</p>
+      </div>
+    </div>
+    <div class="row-between">
+      <div>
+        <div style="font-weight:600; font-size:0.92rem;">Dark mode</div>
+        <div class="muted" style="font-size:0.84rem;">Easier on the eyes when you are working late.</div>
+      </div>
+      <button class="btn btn-outline" id="theme-switch">Turn on</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h4>Change password</h4>
+        <p class="muted" style="margin:0; font-size:0.84rem;">You stay signed in after changing it.</p>
+      </div>
+    </div>
+
+    <form id="password-form" novalidate>
+      <div class="form-grid">
+        <div class="field" data-field="currentPassword">
+          <label for="currentPassword">Current password</label>
+          <input type="password" id="currentPassword" name="currentPassword" autocomplete="current-password">
+          <div class="field-error" data-error-for="currentPassword"></div>
+        </div>
+        <div class="field" data-field="newPassword">
+          <label for="newPassword">New password</label>
+          <input type="password" id="newPassword" name="newPassword" autocomplete="new-password">
+          <div class="hint">At least 4 characters.</div>
+          <div class="field-error" data-error-for="newPassword"></div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="save-password-btn">Update password</button>
+    </form>
+  </div>
+
+</main>
+
+<script src="/js/vendor/sockjs.min.js"></script>
+<script src="/js/vendor/stomp.umd.min.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/profile.js"></script>
+</body>
+</html>

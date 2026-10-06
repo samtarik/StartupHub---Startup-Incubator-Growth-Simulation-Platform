@@ -1,0 +1,8 @@
+package com.startuphub.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record ChangePasswordRequest(@NotBlank(message = "Current password is required") String currentPassword,
+                                    @NotBlank(message = "New password is required")
+                                    @Size(min = 4, message = "Password must be at least 4 characters") String newPassword) {}
